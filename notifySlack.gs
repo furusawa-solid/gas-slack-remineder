@@ -1,22 +1,20 @@
 /**
  * 引数で受け取った値を基にSlackへ通知します。
  *
+ * @param {string} [webhookUrl] - webhookUrl（送信先のSlackチャンネル）。Truthyでない場合はエラー終了します。
  * @param {string} [message] - Slackに表示されるメッセージ。Truthyでない場合はエラー終了します。
  * @param {string} userName - Slackに表示されるユーザー名。
  * @param {string} icon - Slackに表示されるアイコン。例:「:thiking-face:」
- * @param {string} hoge - hogehoge
  * @returns {undefined}
  */
-function notifySlack(message, userName, icon, hoge) {
+function notifySlack(webhookUrl, message, userName, icon) {
   if (!message) {
-    throw new Error("メッセージは必須です。");
+    throw new Error('メッセージは必須です。');
   }
 
-  // TODO: いい感じに送信先切り替えられるようにする
-  // gas-testチャンネル
-  // const webhookUrl = Props.CHANNEL_FRONT_GAS_TEST_CHANNEL_WEB_HOOK_URL;
-  // generalチャンネル
-  const webhookUrl = hoge || Props.CHANNEL_FRONT_GENERAL_CHANNEL_WEB_HOOK_URL;
+  if (!webhookUrl) {
+    throw new Error('webhookUrlは必須です。');
+  }
 
   // username: 通知者の名前
   // icon_emoji: アイコン
@@ -40,8 +38,7 @@ function notifySlack(message, userName, icon, hoge) {
   UrlFetchApp.fetch(webhookUrl, options);
 
   Logger.log('webhook URL:' + webhookUrl);
-  Logger.log('payload:' + payloadObject);
-  Logger.log('options:' + options);
+  Logger.log('payload:' + payloadJson);
 }
 
 /**
@@ -54,7 +51,12 @@ function notifyAttendanceFileCheck() {
   const userName = '勤怠ファイルチェックリマインダー';
   const icon = ':male-police-officer:';
 
-  notifySlack(message, userName, icon, null);
+  notifySlack(
+    Props.CHANNEL_FRONT_GENERAL_CHANNEL_WEB_HOOK_URL,
+    message,
+    userName,
+    icon
+  );
 }
 
 /**
@@ -67,7 +69,12 @@ function notifyOfficework() {
   const userName = '事務書類提出リマインダー';
   const icon = ':male-police-officer:';
 
-  notifySlack(message, userName, icon, null);
+  notifySlack(
+    Props.CHANNEL_FRONT_GENERAL_CHANNEL_WEB_HOOK_URL,
+    message,
+    userName,
+    icon
+  );
 }
 
 /**
@@ -80,7 +87,12 @@ function notifyTeamSpiritApplication() {
   const userName = 'TeamsSpirit承認申請リマインダー';
   const icon = ':male-police-officer:';
 
-  notifySlack(message, userName, icon, Props.CHANESO_PJ_WB_SFCC_CHANNNEL_WEB_HOOK_URL);
+  notifySlack(
+    Props.CHANESO_PJ_WB_SFCC_CHANNNEL_WEB_HOOK_URL,
+    message,
+    userName,
+    icon
+  );
 }
 
 /**
@@ -93,7 +105,12 @@ function notifyTeamSpiritAttendanceDocuments() {
   const userName = 'TeamSpirit勤怠書類提出リマインダー';
   const icon = ':male-police-officer:';
 
-  notifySlack(message, userName, icon, Props.CHANESO_PJ_WB_SFCC_CHANNNEL_WEB_HOOK_URL);
+  notifySlack(
+    Props.CHANESO_PJ_WB_SFCC_CHANNNEL_WEB_HOOK_URL,
+    message,
+    userName,
+    icon
+  );
 }
 
 
@@ -107,5 +124,10 @@ function notifyGaroonWebAttendace() {
   const userName = 'Garoon WEB勤怠提出リマインダー';
   const icon = ':male-police-officer:';
 
-  notifySlack(message, userName, icon, null);
+  notifySlack(
+    Props.CHANNEL_FRONT_GENERAL_CHANNEL_WEB_HOOK_URL,
+    message,
+    userName,
+    icon
+  );
 }
