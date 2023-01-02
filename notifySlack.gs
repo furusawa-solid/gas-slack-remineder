@@ -1,21 +1,22 @@
 /**
  * 引数で受け取った値を基にSlackへ通知します。
- * 
+ *
  * @param {string} [message] - Slackに表示されるメッセージ。Truthyでない場合はエラー終了します。
  * @param {string} userName - Slackに表示されるユーザー名。
  * @param {string} icon - Slackに表示されるアイコン。例:「:thiking-face:」
+ * @param {string} hoge - hogehoge
  * @returns {undefined}
  */
- function notifySlack(message, userName, icon) {
+function notifySlack(message, userName, icon, hoge) {
   if (!message) {
     throw new Error("メッセージは必須です。");
   }
 
   // TODO: いい感じに送信先切り替えられるようにする
   // gas-testチャンネル
-  const webhookUrl = Props.CHANNEL_FRONT_GAS_TEST_CHANNEL_WEB_HOOL_URL;
+  // const webhookUrl = Props.CHANNEL_FRONT_GAS_TEST_CHANNEL_WEB_HOOK_URL;
   // generalチャンネル
-  // const webhookUrl = Props.CHANNEL_FRONT_GENERAL_CHANNEL_WEB_HOOL_URL;
+  const webhookUrl = hoge || Props.CHANNEL_FRONT_GENERAL_CHANNEL_WEB_HOOK_URL;
 
   // username: 通知者の名前
   // icon_emoji: アイコン
@@ -53,12 +54,12 @@ function notifyAttendanceFileCheck() {
   const userName = '勤怠ファイルチェックリマインダー';
   const icon = ':male-police-officer:';
 
-  notifySlack(message, userName, icon);
+  notifySlack(message, userName, icon, null);
 }
 
 /**
  * 事務書類提出のリマインドをSlackに送信する。
- * 
+ *
  * @returns {undefined}
  */
 function notifyOfficework() {
@@ -66,31 +67,45 @@ function notifyOfficework() {
   const userName = '事務書類提出リマインダー';
   const icon = ':male-police-officer:';
 
-  notifySlack(message, userName, icon);
+  notifySlack(message, userName, icon, null);
 }
 
 /**
  * TeamSpiritの承認申請のリマインドをSlackに送信する。
- * 
+ *
  * @returns {undefined}
  */
 function notifyTeamSpiritApplication() {
-  const message = `<@${Props.CHANNEL_FRONT_USER_ID_FURUSAWA}> <@${Props.CHANNEL_FRONT_USER_ID_KOBAYASHI}>\nTeamSpiritの承認申請のリマインドです。\nTeamsSpiritで勤怠を入力して、承認申請をしてください。\n申請が完了したら:white_check_mark:でリアクションしてください。`;
+  const message = `<@${Props.CHANESO_PJ_USER_ID_FURUSAWA}> <@${Props.CHANESO_PJ_USER_ID_KOBAYASHI}> <@${Props.CHANESO_PJ_USER_ID_SATAKE}>\nTeamSpiritの承認申請のリマインドです。\nTeamsSpiritで勤怠を入力して、承認申請をしてください。\n申請が完了したら:white_check_mark:でリアクションしてください。`;
   const userName = 'TeamsSpirit承認申請リマインダー';
   const icon = ':male-police-officer:';
 
-  notifySlack(message, userName, icon);
+  notifySlack(message, userName, icon, Props.CHANESO_PJ_WB_SFCC_CHANNNEL_WEB_HOOK_URL);
 }
 
 /**
  * TeamSpiritの勤怠書類提出のリマインドをSlackに送信する。
- * 
+ *
  * @returns {undefined}
  */
 function notifyTeamSpiritAttendanceDocuments() {
-  const message = `<@${Props.CHANNEL_FRONT_USER_ID_FURUSAWA}> <@${Props.CHANNEL_FRONT_USER_ID_KOBAYASHI}>\nTeamSpiritの勤怠書類提出のリマインドです。\nTeamSpiritから月次サマリーおよび工数実績表をダウンロードしてリプライ欄に提出をお願いします。\n提出が完了したら:white_check_mark:でリアクションしてください。`;
+  const message = `<@${Props.CHANESO_PJ_USER_ID_FURUSAWA}> <@${Props.CHANESO_PJ_USER_ID_KOBAYASHI}> <@${Props.CHANESO_PJ_USER_ID_SATAKE}>\nTeamSpiritの勤怠書類提出のリマインドです。\nTeamSpiritから月次サマリーおよび工数実績表をダウンロードしてリプライ欄に提出をお願いします。\n提出が完了したら:white_check_mark:でリアクションしてください。`;
   const userName = 'TeamSpirit勤怠書類提出リマインダー';
   const icon = ':male-police-officer:';
 
-  notifySlack(message, userName, icon);
+  notifySlack(message, userName, icon, Props.CHANESO_PJ_WB_SFCC_CHANNNEL_WEB_HOOK_URL);
+}
+
+
+/**
+ * GaroonのWEB勤怠提出のリマインドをSlackに送信する。
+ *
+ * @returns {undefined}
+ */
+function notifyGaroonWebAttendace() {
+  const message = '<!channel>\nGaroonの勤怠提出のリマインドです。先週分のWEB勤怠の提出をお願いします。\n提出が完了したら:white_check_mark:でリアクションしてください。\n';
+  const userName = 'Garoon WEB勤怠提出リマインダー';
+  const icon = ':male-police-officer:';
+
+  notifySlack(message, userName, icon, null);
 }
