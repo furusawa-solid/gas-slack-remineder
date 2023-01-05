@@ -78,6 +78,44 @@ function isNewYearHoliday(date) {
 */
 function isNthBusinessDay(businessDayAfter) {
   const today = new Date();
+  const nthBusinessDay = getNthBusinessDay(businessDayAfter);
+
+  if (isSameDate(today, nthBusinessDay)) {
+    Logger.log(`第${businessDayAfter}営業日です。`);
+    return true;
+  } else {
+    Logger.log(`第${businessDayAfter}営業日ではありません。`);
+    return false;
+  }
+}
+
+/**
+ * 実行日が月末から第N営業日ならtrue、それ以外はfalseを返す。
+ *
+ * @param {Number} [businessDayBefore] - 月末から第N営業日のN
+ * @returns {boolean}
+*/
+function isNthLastBusinessDay(businessDayBefore) {
+  const today = new Date();
+  const nthLastBusinessDay = getNthLastBusinessDay(businessDayBefore);
+
+  if (isSameDate(today, nthLastBusinessDay)) {
+    Logger.log(`月末${businessDayBefore}営業日前です。`);
+    return true;
+  } else {
+    Logger.log(`月末${businessDayBefore}営業日前ではありません。`);
+    return false;
+  }
+}
+
+/**
+ * `businessDayAfter`をNとして、実行日付の月の第N営業日を返す。
+ *
+ * @param {Number} [businessDayAfter] - 第N営業日のN
+ * @returns {Date}
+*/
+function getNthBusinessDay(businessDayAfter) {
+  const today = new Date();
   let businessDayCount = 0;
   let dayCount = 0;
 
@@ -94,22 +132,16 @@ function isNthBusinessDay(businessDayAfter) {
   Logger.log(`実行日付: ${today}`);
   Logger.log(`第${businessDayAfter}営業日: ${nthBusinessDay}`);
 
-  if (isSameDate(nthBusinessDay, today)) {
-    Logger.log(`第${businessDayAfter}営業日です。`);
-    return true;
-  } else {
-    Logger.log(`第${businessDayAfter}営業日ではありません。`);
-    return false;
-  }
+  return nthBusinessDay;
 }
 
 /**
- * 実行日が月末から第N営業日ならtrue、それ以外はfalseを返す。
+ * `businessDayBefore`をNとして、実行日付の月の月末から第N営業日を返す。
  *
- * @param {Number} [businessDayBusiness] - 月末から第N営業日のN
- * @returns {boolean}
+ * @param {Number} [businessDayBefore] - 月末から第N営業日のN
+ * @returns {Date}
 */
-function isNthLastBusinessDay(businessDayBefore) {
+function getNthLastBusinessDay(businessDayBefore) {
   const today = new Date();
   const lastDateOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
   let dayCount = 0;
@@ -123,24 +155,18 @@ function isNthLastBusinessDay(businessDayBefore) {
     dayCount++;
   }
 
-  const nthLastBusinessDayOfMonth = new Date(lastDateOfMonth.getFullYear(), lastDateOfMonth.getMonth(), lastDateOfMonth.getDate() - dayCount);
+  const nthLastBusinessDay = new Date(lastDateOfMonth.getFullYear(), lastDateOfMonth.getMonth(), lastDateOfMonth.getDate() - dayCount);
 
   Logger.log(`実行日付: ${today}`);
-  Logger.log(`月末${businessDayBefore}営業日前: ${nthLastBusinessDayOfMonth}`);
+  Logger.log(`月末${businessDayBefore}営業日前: ${nthLastBusinessDay}`);
 
-  if (isSameDate(today, nthLastBusinessDayOfMonth)) {
-    Logger.log(`月末${businessDayBefore}営業日前です。`);
-    return true;
-  } else {
-    Logger.log(`月末${businessDayBefore}営業日前ではありません。`);
-    return false;
-  }
+  return nthLastBusinessDay;
 }
 
 /**
- * 実行日を起算日として最初に見つかった営業日を返す（実行日が営業日の場合は実行日を返します）。
- * 返却されるDate型オブジェクトの時間、分、秒、ミリ秒には0が設定されます。
- * 週ベースのタイマーで、その週の第一営業日を取得するために使用されることを想定します。
+ * 実行日を起算日として最初に見つかった営業日を返す（実行日が営業日の場合は実行日を返す）。
+ * 返却されるDate型オブジェクトの時間、分、秒、ミリ秒には0が設定される。
+ * 週ベースのタイマーで、その週の第一営業日を取得するために使用されることを想定する。
  *
  * @returns {Date}
  */

@@ -113,7 +113,6 @@ function notifyTeamSpiritAttendanceDocuments() {
   );
 }
 
-
 /**
  * GaroonのWEB勤怠提出のリマインドをSlackに送信する。
  *
