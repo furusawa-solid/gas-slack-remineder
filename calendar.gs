@@ -1,20 +1,4 @@
 /**
- * 引数で受け取った日付が同じ日付の場合はtrue、それ以外はfalseを返す。
- *
- * @param {Date} [date1] - 日付
- * @param {Date} [date2] - 日付
- * @returns {boolean}
- */
-function isSameDate(date1, date2) {
-  if (date1.getFullYear() === date2.getFullYear() &&
-    date1.getMonth() === date2.getMonth() &&
-    date1.getDate() === date2.getDate()) {
-    return true;
-  }
-  return false;
-}
-
-/**
  * 引数で受け取った日付が営業日（平日かつ祝日でない）の場合はtrue、それ以外はfalseを返す。
  *
  * @param {Date} [date] - 日付
@@ -110,6 +94,7 @@ function getNthLastBusinessDay(businessDayBefore) {
   let dayCount = 0;
   let businessDayCount = 0;
 
+  // TODO: businessDayBeforeがNではなくN-1になっている問題を修正する
   while (businessDayCount < businessDayBefore) {
     const date = new Date(lastDateOfMonth.getFullYear(), lastDateOfMonth.getMonth(), lastDateOfMonth.getDate() - dayCount);
     if (isBusinessDay(date)) {
