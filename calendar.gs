@@ -71,44 +71,6 @@ function isNewYearHoliday(date) {
 }
 
 /**
- * 実行日が第N営業日ならtrue、それ以外はfalseを返す。
- *
- * @param {Number} [businessDayAfter] - 第N営業日のN
- * @returns {boolean}
-*/
-function isNthBusinessDay(businessDayAfter) {
-  const today = new Date();
-  const nthBusinessDay = getNthBusinessDay(businessDayAfter);
-
-  if (isSameDate(today, nthBusinessDay)) {
-    Logger.log(`第${businessDayAfter}営業日です。`);
-    return true;
-  } else {
-    Logger.log(`第${businessDayAfter}営業日ではありません。`);
-    return false;
-  }
-}
-
-/**
- * 実行日が月末から第N営業日ならtrue、それ以外はfalseを返す。
- *
- * @param {Number} [businessDayBefore] - 月末から第N営業日のN
- * @returns {boolean}
-*/
-function isNthLastBusinessDay(businessDayBefore) {
-  const today = new Date();
-  const nthLastBusinessDay = getNthLastBusinessDay(businessDayBefore);
-
-  if (isSameDate(today, nthLastBusinessDay)) {
-    Logger.log(`月末${businessDayBefore}営業日前です。`);
-    return true;
-  } else {
-    Logger.log(`月末${businessDayBefore}営業日前ではありません。`);
-    return false;
-  }
-}
-
-/**
  * `businessDayAfter`をNとして、実行日付の月の第N営業日を返す。
  *
  * @param {Number} [businessDayAfter] - 第N営業日のN
@@ -128,6 +90,7 @@ function getNthBusinessDay(businessDayAfter) {
   }
 
   const nthBusinessDay = new Date(today.getFullYear(), today.getMonth(), dayCount);
+  initializeDateWithZero(nthBusinessDay);
 
   Logger.log(`実行日付: ${today}`);
   Logger.log(`第${businessDayAfter}営業日: ${nthBusinessDay}`);
@@ -156,6 +119,7 @@ function getNthLastBusinessDay(businessDayBefore) {
   }
 
   const nthLastBusinessDay = new Date(lastDateOfMonth.getFullYear(), lastDateOfMonth.getMonth(), lastDateOfMonth.getDate() - dayCount);
+  initializeDateWithZero(nthLastBusinessDay);
 
   Logger.log(`実行日付: ${today}`);
   Logger.log(`月末${businessDayBefore}営業日前: ${nthLastBusinessDay}`);
@@ -172,14 +136,24 @@ function getNthLastBusinessDay(businessDayBefore) {
  */
 function getFirstBusinessDay() {
   const today = new Date();
-  today.setHours(0);
-  today.setMinutes(0);
-  today.setSeconds(0);
-  today.setMilliseconds(0);
+  initializeDateWithZero(today);
 
   while (!isBusinessDay(today)) {
     today.setDate(today.getDate() + 1);
   }
 
   return today;
+}
+
+/**
+ * 引数`date`で受け取った日付の時・分・秒・ミリ秒に0を設定する。
+ *
+ * @param date 日付
+ * @returns {Date}
+ */
+function initializeDateWithZero(date) {
+  date.setHours(0);
+  date.setMinutes(0);
+  date.setSeconds(0);
+  date.setMilliseconds(0);
 }
